@@ -7,12 +7,12 @@ const port = process.env.PORT || 8080;
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req,res){
- res.send('All notes');
+ res.send('All notes WORK !');
 });
 
 app.post('/', function (req,res){
     console.log(req.body);
-    res.send("Add new note");
+    res.send("Add new note WORK !");
 });
 
 
