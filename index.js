@@ -30,7 +30,11 @@ MongoClient.connect(
     });
 
     // Read
-    //All
+    // Home
+    app.get("/", (req, res) => {
+      res.send("Version 0.2 Notes API");
+    });
+    // All
     app.get("/notes", (req, res) => {
       database
         .collection("notes")
