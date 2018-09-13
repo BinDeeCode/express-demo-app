@@ -1,23 +1,88 @@
-var express = require('express');
-var bodyParser = require('body-parser');
+var express = require("express");
+var bodyParser = require("body-parser");
+var MongoClient = require("mongodb").MongoClient;
+var ObjectID = require("mongodb").ObjectId;
 var app = express();
+var db = require("./config/db");
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get('/', function (req,res){
- res.send('All notes WORK !');
-});
+MongoClient.connect(
+  db.url,
+  function(err, database) {
+    if (err) {
+      console.log(err);
+    }
 
-app.post('/', function (req,res){
-    console.log(req.body);
-    res.send("Add new note WORK !");
-});
+    // Create
 
+    app.post("/notes", function(req, res) {
+      const note = { text: req.body.text, title: req.body.title };
+      database.collection("notes").insert(note, function(err, result) {
+        if (err) {
+          res.send({ error: "An error has occurred" });
+        } else {
+          res.send(result.ops[0]);
+        }
+      });
+    });
 
+    // Read
+    //All
+    app.get("/notes", (req, res) => {
+      database
+        .collection("notes")
+        .find({})
+        .toArray(function(err, result) {
+          res.send(result);
+        });
+    });
+    //One
+    app.get("/notes/:id", (req, res) => {
+      const id = req.params.id;
+      const details = { _id: new ObjectID(id) };
+      database.collection("notes").findOne(details, (err, item) => {
+        if (err) {
+          res.send({ error: "An error has occurred" });
+        } else {
+          res.send(item);
+        }
+      });
+    });
 
+    // Update
 
-app.listen(port, function(){
-console.log('App listen on port ' + port);
-});
+    app.put("/notes/:id", (req, res) => {
+      const id = req.params.id;
+      const details = { _id: new ObjectID(id) };
+      const note = { text: req.body.body, title: req.body.title };
+      database.collection("notes").update(details, note, (err, result) => {
+        if (err) {
+          res.send({ error: "An error has occurred" });
+        } else {
+          res.send(note);
+        }
+      });
+    });
+
+    // Delete
+
+    app.delete("/notes/:id", (req, res) => {
+      const id = req.params.id;
+      const details = { _id: new ObjectID(id) };
+      db.collection("notes").remove(details, (err, item) => {
+        if (err) {
+          res.send({ error: "An error has occurred" });
+        } else {
+          res.send("Note " + id + " deleted!");
+        }
+      });
+    });
+
+    app.listen(port, function() {
+      console.log("App listen on port " + port);
+    });
+  }
+);

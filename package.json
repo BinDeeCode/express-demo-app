@@ -5,11 +5,14 @@
   "author": "Dz",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "mongodb": "2.2.16",
+    "mongojs": "^2.6.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.4"
