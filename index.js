@@ -2,15 +2,15 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var MongoClient = require("mongodb").MongoClient;
 var ObjectID = require("mongodb").ObjectId;
+require("dotenv").config();
 var app = express();
-var db = require("./config/db");
 
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
 MongoClient.connect(
-  db.url,
+  process.env.DATABASE_URL,
   function(err, database) {
     if (err) {
       console.log(err);
