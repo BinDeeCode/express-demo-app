@@ -76,7 +76,7 @@ MongoClient.connect(
     app.delete("/notes/:id", (req, res) => {
       const id = req.params.id;
       const details = { _id: new ObjectID(id) };
-      db.collection("notes").remove(details, (err, item) => {
+      database.collection("notes").remove(details, (err, item) => {
         if (err) {
           res.send({ error: "An error has occurred" });
         } else {
