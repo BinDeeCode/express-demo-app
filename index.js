@@ -1,4 +1,5 @@
 var express = require("express");
+var cors = require("cors");
 var bodyParser = require("body-parser");
 var MongoClient = require("mongodb").MongoClient;
 var ObjectID = require("mongodb").ObjectId;
@@ -7,6 +8,7 @@ var app = express();
 
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 MongoClient.connect(
@@ -32,7 +34,7 @@ MongoClient.connect(
     // Read
     // Home
     app.get("/", (req, res) => {
-      res.send("Version 0.2 Notes API");
+      res.send("Version 0.2 Notes API CORS");
     });
     // All
     app.get("/notes", (req, res) => {
